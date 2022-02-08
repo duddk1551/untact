@@ -29,25 +29,25 @@ public class MpaUsrArticleController {
 		
 	}
 	
-	@RequestMapping("/usr/article/list")
-	@ResponseBody
-	public List<Article> showList(String searchKeywordType, String searchKeyword) {
-			
-		if(searchKeywordType != null) {
-			searchKeywordType = searchKeywordType.trim();
-		}
-		if(searchKeywordType == null || searchKeywordType.length() == 0) {
-			searchKeywordType = "titleAndBody";
-		}
-		if(searchKeyword != null) {
-			searchKeyword = searchKeyword.trim();
-		}
-		if(searchKeyword == null || searchKeyword.length() == 0) {
-			searchKeyword = null;
-		}
-		
-		return articleService.getArticles(searchKeywordType, searchKeyword);
-	}
+//	@RequestMapping("/usr/article/list")
+//	@ResponseBody
+//	public List<Article> showList(String searchKeywordType, String searchKeyword) {
+//			
+//		if(searchKeywordType != null) {
+//			searchKeywordType = searchKeywordType.trim();
+//		}
+//		if(searchKeywordType == null || searchKeywordType.length() == 0) {
+//			searchKeywordType = "titleAndBody";
+//		}
+//		if(searchKeyword != null) {
+//			searchKeyword = searchKeyword.trim();
+//		}
+//		if(searchKeyword == null || searchKeyword.length() == 0) {
+//			searchKeyword = null;
+//		}
+//		
+//		return articleService.getArticles(searchKeywordType, searchKeyword);
+//	}
 	
 	@RequestMapping("/usr/article/addArticle")
 	@ResponseBody

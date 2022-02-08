@@ -22,7 +22,10 @@ public class ArticleService {
 	}
 	
 	public ResultData addArticle(String title, String content) {
-		int id = articleDao.addArticle(title, content);
+		int boardId = 3;
+		int memberId = 3;
+		articleDao.addArticle(boardId, memberId, title, content);
+		int id = 1; //일단 가짜로
 		
 		return new ResultData("S-1", "게시물이 작성되었습니다.", "id", id);
 	}
@@ -42,9 +45,9 @@ public class ArticleService {
 		return new ResultData("S-1", "게시물이 수정되었습니다.", "id", id);
 	}
 	
-	public List<Article> getArticles(String searchKeywordType, String searchKeyword) {
-		return articleDao.getArticles(searchKeywordType, searchKeyword);
-	}
+//	public List<Article> getArticles(String searchKeywordType, String searchKeyword) {
+//		return articleDao.getArticles(searchKeywordType, searchKeyword);
+//	}
 	
 	
 }
