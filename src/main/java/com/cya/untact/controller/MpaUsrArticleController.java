@@ -3,121 +3,101 @@ package com.cya.untact.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.cya.untact.dto.Article;
 import com.cya.untact.dto.ResultData;
+import com.cya.untact.service.ArticleService;
 import com.cya.untact.util.Util;
 
 @Controller
 public class MpaUsrArticleController {
 	
-	private List<Article> articles;
-	private int articleLastId;
 	
-	public MpaUsrArticleController() {
-		articles = new ArrayList<>();
-		articleLastId = 0;
-		makeTestData();
+	@Autowired
+	private ArticleService articleService;
+
+	@RequestMapping("/usr/article/detail")
+	@ResponseBody
+	public Article getArticle(Integer id) {
+			
+		Article article = articleService.getArticle(id);
+		return article;
+		
 	}
 	
-	@RequestMapping("/mpaUsr/article/addArticle")
+	@RequestMapping("/usr/article/list")
+	@ResponseBody
+	public List<Article> showList(String searchKeywordType, String searchKeyword) {
+			
+		if(searchKeywordType != null) {
+			searchKeywordType = searchKeywordType.trim();
+		}
+		if(searchKeywordType == null || searchKeywordType.length() == 0) {
+			searchKeywordType = "titleAndBody";
+		}
+		if(searchKeyword != null) {
+			searchKeyword = searchKeyword.trim();
+		}
+		if(searchKeyword == null || searchKeyword.length() == 0) {
+			searchKeyword = null;
+		}
+		
+		return articleService.getArticles(searchKeywordType, searchKeyword);
+	}
+	
+	@RequestMapping("/usr/article/addArticle")
 	@ResponseBody
 	public ResultData addArticle(String title, String content) {
-		int id = writeArticle(title, content);
-		Article article = getArticleById(id);
 		
-		return new ResultData("S-1", id + "번 글이 작성되었습니다.", "article", article);
+		if(Util.isEmpty(title)) {
+			return new ResultData("F-1", "제목을 입력해주세요");
+		}
+		
+		if(Util.isEmpty(content)) {
+			return new ResultData("F-2", "내용을 입력해주세요");
+		}
+		return articleService.addArticle(title, content);
 	}
-
-	@RequestMapping("/mpaUsr/article/getArticle")
+	
+	@RequestMapping("/usr/article/deleteArticle")
 	@ResponseBody
-	public ResultData getArticle(int id) {
-		Article article = getArticleById(id);
+	public ResultData deleteArticle(Integer id) {
+		
+		if(Util.isEmpty(id)) {
+			return new ResultData("F-1", "번호를 입력해주세요");
+		}
+		
+		return articleService.deleteArticle(id);
+		
+	}
+	
+	@RequestMapping("/usr/article/modifyArticle")
+	@ResponseBody
+	public ResultData modifyArticle(Integer id, String title, String content) {
+		
+		if(Util.isEmpty(id)) {
+			return new ResultData("F-1", "번호를 입력해주세요");
+		}
+		if(Util.isEmpty(title)) {
+			return new ResultData("F-2", "제목을 입력해주세요");
+		}
+		if(Util.isEmpty(content)) {
+			return new ResultData("F-3", "내용을 입력해주세요");
+		}
+		
+		Article article = articleService.getArticle(id);
 		
 		if(article == null) {
-			return new ResultData("F-1", id + "번 글은 존재하지 않습니다.", "id", id);
+			return new ResultData("F-4", "존재하지 않는 게시물입니다.");
 		}
 		
-		return new ResultData("S-1", article.getId() + "번 글입니다.", "article", article);
-	}
-	
+		return articleService.modifyArticle(id, title, content);
 
-	@RequestMapping("/mpaUsr/article/deleteArticle")
-	@ResponseBody
-	public ResultData deleteArticle(int id) {
-		boolean deleted = deleteArticleById(id);
-		
-		if(deleted == false) {
-			return new ResultData("F-1", id + "번 글이 존재하지 않습니다.", "id", id);
-		}
-		
-		return new ResultData("F-1", id + "번 글이 삭제되었습니다.", "id", id);
 	}
 	
-	@RequestMapping("/mpaUsr/article/modifyArticle")
-	@ResponseBody
-	public ResultData modifyArticle(int id, String title, String content) {
-		boolean modified = modifyArticleById(id, title, content);
-		
-		if(modified == false) {
-			return new ResultData("F-1", id + "번 글이 존재하지 않습니다.", "id", id);
-		}
-		
-		return new ResultData("F-1", id + "번 글이 수정되었습니다.", "article", getArticleById(id));
-	}
-	
-
-	//내부메서드
-	private void makeTestData() {
-		for(int i = 0; i < 5; i++) {
-			writeArticle("제목1", "내용");
-		}
-	}
-	private int writeArticle(String title, String content) {
-		int id = articleLastId + 1;
-		String regDate = Util.getNowDateStr();
-		String updateDate = Util.getNowDateStr();
-		
-		Article article = new Article(id, regDate, updateDate, title, content);
-		articles.add(article);
-		
-		articleLastId = id;
-		
-		return id;
-	}
-
-	private Article getArticleById(int id) {
-		for(Article article : articles) {
-			if(article.getId() == id) {
-				return article;
-			}
-		}
-		return null;
-	}
-	
-	private boolean deleteArticleById(int id) {
-		Article article = getArticleById(id);
-		
-		if(article == null) {
-			return false;
-		}
-		articles.remove(article);
-		return true;
-	}
-	
-	private boolean modifyArticleById(int id, String title, String content) {
-		Article article = getArticleById(id);
-		
-		if(article == null) {
-			return false;
-		}
-		article.setUpdateDate(Util.getNowDateStr());
-		article.setTitle(title);
-		article.setContent(content);
-		return true;
-	}
 	
 }
