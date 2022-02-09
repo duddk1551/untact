@@ -22,6 +22,8 @@ public interface ArticleDao {
 	//public List<Article> getArticles(String searchKeywordType, String searchKeyword);
 	
 	boolean deleteArticle(@Param("id") int id);
+	
+	int getLastInsertId();
 
 	void modifyArticle(@Param("id") int id,@Param("title") String title,@Param("content") String content);
 

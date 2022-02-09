@@ -67,9 +67,16 @@ public class MpaUsrArticleController {
 	@ResponseBody
 	public ResultData deleteArticle(Integer id) {
 		
-		if(Util.isEmpty(id)) {
+		if(id == null) {
 			return new ResultData("F-1", "번호를 입력해주세요");
 		}
+		
+		Article article = articleService.getArticle(id);
+		
+		if(article == null) {
+			return new ResultData("F-1", "해당 게시물은 존재하지 않습니다.");
+		} 
+			
 		
 		return articleService.deleteArticle(id);
 		
@@ -79,7 +86,7 @@ public class MpaUsrArticleController {
 	@ResponseBody
 	public ResultData modifyArticle(Integer id, String title, String content) {
 		
-		if(Util.isEmpty(id)) {
+		if(id == null) {
 			return new ResultData("F-1", "번호를 입력해주세요");
 		}
 		if(Util.isEmpty(title)) {

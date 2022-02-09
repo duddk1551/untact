@@ -25,7 +25,7 @@ public class ArticleService {
 		int boardId = 3;
 		int memberId = 3;
 		articleDao.addArticle(boardId, memberId, title, content);
-		int id = 1; //일단 가짜로
+		int id = articleDao.getLastInsertId();
 		
 		return new ResultData("S-1", "게시물이 작성되었습니다.", "id", id);
 	}

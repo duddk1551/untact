@@ -26,13 +26,18 @@
 		SELECT *
 		FROM article AS A
 		WHERE A.id = #{id}
+		AND A.delStatus = 0
+	</select>
+	
+	<select id="getLastInsertId" resultType="int">
+		SELECT LAST_INSERT_ID()
 	</select>
 	
 	<update id="deleteArticle">
 		UPDATE article
 		SET delStatus = 1,
-		delDate = NOW(),
-		WEHRE id = #{id}
+		delDate = NOW()
+		WHERE id = #{id}
 	</update>
   
 </mapper>

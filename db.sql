@@ -61,4 +61,14 @@ updateDate = NOW(),
 boardId = 2,
 memberId = 2,
 title = '제목5',
-content = '본문5;
+content = '본문5';
+
+INSERT INTO article
+SET regDate = NOW(),
+updateDate = NOW(),
+boardId = 2,
+memberId = 2,
+title = '제목6',
+content = '본문6';
+
+SELECT LAST_INSERT_ID();
