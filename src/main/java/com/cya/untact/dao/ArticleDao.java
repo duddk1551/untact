@@ -8,6 +8,7 @@ import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Component;
 
 import com.cya.untact.dto.Article;
+import com.cya.untact.dto.Board;
 import com.cya.untact.dto.ResultData;
 import com.cya.untact.util.Util;
 
@@ -26,5 +27,11 @@ public interface ArticleDao {
 	int getLastInsertId();
 
 	void modifyArticle(@Param("id") int id,@Param("title") String title,@Param("content") String content);
+
+	Board getBoard(@Param("id") int id);
+
+	int getArticleTotalCount(@Param("boardId") int boardId);
+
+	List<Article> getForPrintArticles(@Param("boardId") int boardId, @Param("limitFrom") int limitFrom, @Param("limitTake") int limitTake);
 
 }

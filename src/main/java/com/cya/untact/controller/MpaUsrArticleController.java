@@ -1,14 +1,16 @@
 package com.cya.untact.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.cya.untact.dto.Article;
+import com.cya.untact.dto.Board;
 import com.cya.untact.dto.ResultData;
 import com.cya.untact.service.ArticleService;
 import com.cya.untact.util.Util;
@@ -19,6 +21,18 @@ public class MpaUsrArticleController {
 	
 	@Autowired
 	private ArticleService articleService;
+	
+	private String msgAndBack(Model model, String msg) {
+		model.addAttribute("msg", msg);
+		model.addAttribute("historyBack", true);
+		return "common/redirect";
+	}
+	
+	private String msgAndReplace(Model model, String msg, String replaceUrl) {
+		model.addAttribute("msg", msg);
+		model.addAttribute("replaceUrl", replaceUrl);
+		return "common/redirect";
+	}
 
 	@RequestMapping("/usr/article/detail")
 	@ResponseBody
@@ -30,7 +44,29 @@ public class MpaUsrArticleController {
 	}
 	
 	@RequestMapping("/usr/article/list")
-	public String showList(int boardId) {
+	public String showList(Model model, int boardId, @RequestParam(defaultValue = "1") int page) {
+		Board board = articleService.getBoard(boardId);
+		
+		if(board == null) { 
+			return msgAndBack(model, boardId + "번 게시판이 존재하지 않습니다.");
+		}
+		
+		model.addAttribute("board", board);
+		
+		int totalItemsCount = articleService.getArticleTotalCount(boardId);
+		
+		model.addAttribute("totalItemsCount", totalItemsCount);
+		
+		int itemsCountInAPage = 20;
+		int totalPage = (int) Math.ceil(totalItemsCount / (double)itemsCountInAPage);
+		
+		model.addAttribute("page", page);
+		model.addAttribute("totalPage", totalPage);
+		
+		List<Article> articles = articleService.getForPrintArticles(boardId, itemsCountInAPage, page);
+		
+		model.addAttribute("articles", articles);
+		
 		return "usr/article/list";
 	}
 	
@@ -69,24 +105,23 @@ public class MpaUsrArticleController {
 	}
 	
 	@RequestMapping("/usr/article/deleteArticle")
-	@ResponseBody
-	public ResultData deleteArticle(Integer id) {
+	public String deleteArticle(Model model, Integer id) {
 		
 		if(id == null) {
-			return new ResultData("F-1", "번호를 입력해주세요");
+			return msgAndBack(model, "번호를 입력해주세요");
 		}
 		
-		Article article = articleService.getArticle(id);
+		ResultData rd = articleService.deleteArticle(id);
 		
-		if(article == null) {
-			return new ResultData("F-1", "해당 게시물은 존재하지 않습니다.");
-		} 
-			
+		if(rd.isFail()) {
+			return msgAndBack(model, rd.getMsg());
+		}	
 		
-		return articleService.deleteArticle(id);
+		String redirectUrl = "../article/list?boardId=" + rd.getBody().get("id");		
+		return msgAndReplace(model, rd.getMsg(), redirectUrl);
 		
 	}
-	
+
 	@RequestMapping("/usr/article/modifyArticle")
 	@ResponseBody
 	public ResultData modifyArticle(Integer id, String title, String content) {

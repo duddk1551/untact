@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.cya.untact.dao.ArticleDao;
 import com.cya.untact.dto.Article;
+import com.cya.untact.dto.Board;
 import com.cya.untact.dto.ResultData;
 import com.cya.untact.util.Util;
 
@@ -43,6 +44,21 @@ public class ArticleService {
 
 		articleDao.modifyArticle(id, title, content);
 		return new ResultData("S-1", "게시물이 수정되었습니다.", "id", id);
+	}
+
+	public Board getBoard(int id) {
+		return articleDao.getBoard(id);
+	}
+
+	public int getArticleTotalCount(int boardId) {
+		return articleDao.getArticleTotalCount(boardId);
+	}
+
+	public List<Article> getForPrintArticles(int boardId, int itemsCountInAPage, int page) {
+		int limitFrom = (page - 1) * itemsCountInAPage;
+		int limitTake = itemsCountInAPage;
+		
+		return articleDao.getForPrintArticles(boardId, limitFrom, limitTake);
 	}
 	
 //	public List<Article> getArticles(String searchKeywordType, String searchKeyword) {
