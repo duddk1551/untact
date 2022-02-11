@@ -51,7 +51,7 @@ html > body {
 .item-bb-1-not-last-child > *:not(:last-child) {
   border-bottom:1px solid #afafaf;
 }
-
+/*
 .title-bar {
   font-size:1.1rem;
   padding-top:5px;
@@ -61,7 +61,7 @@ html > body {
   border:solid black;
   border-width:2px 0;
 }
-
+*/
 .title-bar:first-child {
   margin-top:0;
 }
@@ -189,6 +189,10 @@ box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #
   
   /* .h-20 */
   height: 4rem;
+}
+
+.top-bar + * {
+	padding-top: 6rem;
 }
 
 /* 탑바 - 메뉴 박스 시작 */

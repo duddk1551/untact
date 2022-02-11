@@ -29,6 +29,11 @@ public class MpaUsrArticleController {
 		
 	}
 	
+	@RequestMapping("/usr/article/list")
+	public String showList(int boardId) {
+		return "usr/article/list";
+	}
+	
 //	@RequestMapping("/usr/article/list")
 //	@ResponseBody
 //	public List<Article> showList(String searchKeywordType, String searchKeyword) {
