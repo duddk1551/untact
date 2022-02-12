@@ -1,6 +1,5 @@
 package com.cya.untact.service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +9,6 @@ import com.cya.untact.dao.ArticleDao;
 import com.cya.untact.dto.Article;
 import com.cya.untact.dto.Board;
 import com.cya.untact.dto.ResultData;
-import com.cya.untact.util.Util;
 
 @Service
 public class ArticleService {
@@ -50,20 +48,27 @@ public class ArticleService {
 		return articleDao.getBoard(id);
 	}
 
-	public int getArticleTotalCount(int boardId, String searchKeyword) {
-		return articleDao.getArticleTotalCount(boardId, searchKeyword);
+	public int getArticleTotalCount(int boardId, String searchKeyword, String searchKeywordType) {
+		
+		if(searchKeyword != null && searchKeyword.length() == 0) {
+			searchKeyword = null;
+		}
+		
+		return articleDao.getArticleTotalCount(boardId, searchKeyword, searchKeywordType);
 	}
 
-	public List<Article> getForPrintArticles(int boardId, String searchKeyword, int itemsCountInAPage, int page) {
+	public List<Article> getForPrintArticles(int boardId, String searchKeyword, String searchKeywordType, int itemsCountInAPage, int page) {
+		
+		if(searchKeyword != null && searchKeyword.length() == 0) {
+			searchKeyword = null;
+		}
+		
 		int limitFrom = (page - 1) * itemsCountInAPage;
 		int limitTake = itemsCountInAPage;
 		
-		return articleDao.getForPrintArticles(boardId, searchKeyword, limitFrom, limitTake);
+		return articleDao.getForPrintArticles(boardId, searchKeyword, searchKeywordType, limitFrom, limitTake);
 	}
 	
-//	public List<Article> getArticles(String searchKeywordType, String searchKeyword) {
-//		return articleDao.getArticles(searchKeywordType, searchKeyword);
-//	}
 	
 	
 }

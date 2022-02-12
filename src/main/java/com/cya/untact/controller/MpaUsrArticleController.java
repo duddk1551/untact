@@ -47,8 +47,12 @@ public class MpaUsrArticleController {
 	}
 	
 	@RequestMapping("/usr/article/list")
-	public String showList(Model model, String searchKeyword ,@RequestParam(defaultValue = "1") int boardId, @RequestParam(defaultValue = "1") int page) {
+	public String showList(Model model, String searchKeyword, String searchKeywordType, @RequestParam(defaultValue = "1") int boardId, @RequestParam(defaultValue = "1") int page) {
 		Board board = articleService.getBoard(boardId);
+		
+		if(Util.isEmpty(searchKeywordType)) {
+			searchKeywordType = "titleAndBody";
+		}
 		
 		if(board == null) { 
 			return msgAndBack(model, boardId + "번 게시판이 존재하지 않습니다.");
@@ -56,7 +60,7 @@ public class MpaUsrArticleController {
 		
 		model.addAttribute("board", board);
 		
-		int totalItemsCount = articleService.getArticleTotalCount(boardId, searchKeyword);
+		int totalItemsCount = articleService.getArticleTotalCount(boardId, searchKeyword, searchKeywordType);
 		
 		model.addAttribute("totalItemsCount", totalItemsCount);
 		
@@ -66,32 +70,12 @@ public class MpaUsrArticleController {
 		model.addAttribute("page", page);
 		model.addAttribute("totalPage", totalPage);
 		
-		List<Article> articles = articleService.getForPrintArticles(boardId, searchKeyword, itemsCountInAPage, page);
+		List<Article> articles = articleService.getForPrintArticles(boardId, searchKeyword, searchKeywordType, itemsCountInAPage, page);
 		
 		model.addAttribute("articles", articles);
 		
 		return "usr/article/list";
 	}
-	
-//	@RequestMapping("/usr/article/list")
-//	@ResponseBody
-//	public List<Article> showList(String searchKeywordType, String searchKeyword) {
-//			
-//		if(searchKeywordType != null) {
-//			searchKeywordType = searchKeywordType.trim();
-//		}
-//		if(searchKeywordType == null || searchKeywordType.length() == 0) {
-//			searchKeywordType = "titleAndBody";
-//		}
-//		if(searchKeyword != null) {
-//			searchKeyword = searchKeyword.trim();
-//		}
-//		if(searchKeyword == null || searchKeyword.length() == 0) {
-//			searchKeyword = null;
-//		}
-//		
-//		return articleService.getArticles(searchKeywordType, searchKeyword);
-//	}
 	
 	@RequestMapping("/usr/article/addArticle")
 	@ResponseBody
