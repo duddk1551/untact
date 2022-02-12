@@ -51,7 +51,7 @@ public class MpaUsrArticleController {
 		Board board = articleService.getBoard(boardId);
 		
 		if(Util.isEmpty(searchKeywordType)) {
-			searchKeywordType = "titleAndBody";
+			searchKeywordType = "titleAndContent";
 		}
 		
 		if(board == null) { 

@@ -9,7 +9,7 @@
 		FROM article AS A
 		WHERE A.boardId = #{boardId}
 		<if test="searchKeyword != null">
-			<if test="searchKeywordType == 'titleAndBody'">
+			<if test="searchKeywordType == 'titleAndContent'">
 				AND (
 				A.title LIKE CONCAT('%',#{searchKeyword},'%')
 				OR A.content LIKE CONCAT('%',#{searchKeyword},'%')
