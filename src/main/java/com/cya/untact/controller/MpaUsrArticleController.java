@@ -15,7 +15,10 @@ import com.cya.untact.dto.ResultData;
 import com.cya.untact.service.ArticleService;
 import com.cya.untact.util.Util;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Controller
+@Slf4j
 public class MpaUsrArticleController {
 	
 	
@@ -44,7 +47,7 @@ public class MpaUsrArticleController {
 	}
 	
 	@RequestMapping("/usr/article/list")
-	public String showList(Model model, int boardId, @RequestParam(defaultValue = "1") int page) {
+	public String showList(Model model, String searchKeyword ,@RequestParam(defaultValue = "1") int boardId, @RequestParam(defaultValue = "1") int page) {
 		Board board = articleService.getBoard(boardId);
 		
 		if(board == null) { 
@@ -53,7 +56,7 @@ public class MpaUsrArticleController {
 		
 		model.addAttribute("board", board);
 		
-		int totalItemsCount = articleService.getArticleTotalCount(boardId);
+		int totalItemsCount = articleService.getArticleTotalCount(boardId, searchKeyword);
 		
 		model.addAttribute("totalItemsCount", totalItemsCount);
 		
@@ -63,7 +66,7 @@ public class MpaUsrArticleController {
 		model.addAttribute("page", page);
 		model.addAttribute("totalPage", totalPage);
 		
-		List<Article> articles = articleService.getForPrintArticles(boardId, itemsCountInAPage, page);
+		List<Article> articles = articleService.getForPrintArticles(boardId, searchKeyword, itemsCountInAPage, page);
 		
 		model.addAttribute("articles", articles);
 		
