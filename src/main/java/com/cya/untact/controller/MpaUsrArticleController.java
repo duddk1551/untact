@@ -91,6 +91,21 @@ public class MpaUsrArticleController {
 		return articleService.addArticle(title, content);
 	}
 	
+	@RequestMapping("/usr/article/write")
+	public String writeArticle(Model model, @RequestParam(defaultValue = "1") int boardId) {
+		
+		Board board = articleService.getBoard(boardId);
+		
+		if(board == null) { 
+			return msgAndBack(model, boardId + "번 게시판이 존재하지 않습니다.");
+		}
+		
+		model.addAttribute("board", board);
+		
+		return "usr/article/write";
+		
+	}
+	
 	@RequestMapping("/usr/article/deleteArticle")
 	public String deleteArticle(Model model, Integer id) {
 		
