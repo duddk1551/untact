@@ -54,6 +54,29 @@
 				<hr />
 			</c:forEach>
 		</div>
+		<div class="pages">
+			<c:set var="pageMenuArmSize" value="4"/>
+			<c:set var="startPage" value="${page - pageMenuArmSize >= 1 ? page - pageMenuArmSize : 1}"/>
+			<c:set var="endPage" value="${page + pageMenuArmSize <= totalPage ? page + pageMenuArmSize : 1}"/>
+			
+			<c:set var="urlBase" value="?boardId=${board.id}"/>
+			<c:set var="urlBase" value="${urlBase}&searchKeywordType=${param.searchKeywordType}"/>
+			<c:set var="urlBase" value="${urlBase}&searchKeyword=${param.searchKeyword}"/>
+			
+			<c:if test="${startPage > 1}">
+				<a class="text-lg" href="${urlBase}&page=1">◀◀</a>
+				<a class="text-lg" href="${urlBase}&page=${startPage-1}">◀</a>
+			</c:if>
+			
+			<c:forEach var="i" begin="${startPage}" end="${endPage}">
+				<a class="text-lg ${page == i ? 'text-red-500' : ''}" href="${urlBase}&page=${i}">${i}</a>
+			</c:forEach>
+			
+			<c:if test="${endPage < totalPage}">
+				<a class="text-lg" href="${urlBase}&page=${endPage + 1}">▶</a>
+				<a class="text-lg" href="${urlBase}&page=${totalPage}">▶▶</a>
+			</c:if>
+		</div>
 	</div>
 </div>
 <%@ include file="../common/foot.jspf" %>
