@@ -20,9 +20,8 @@ public class ArticleService {
 		return articleDao.getArticle(id);
 	}
 	
-	public ResultData addArticle(String title, String content) {
-		int boardId = 3;
-		int memberId = 3;
+	public ResultData addArticle(int boardId, int memberId, String title, String content) {
+		
 		articleDao.addArticle(boardId, memberId, title, content);
 		int id = articleDao.getLastInsertId();
 		
@@ -67,6 +66,10 @@ public class ArticleService {
 		int limitTake = itemsCountInAPage;
 		
 		return articleDao.getForPrintArticles(boardId, searchKeyword, searchKeywordType, limitFrom, limitTake);
+	}
+
+	public Article getArticleForPrint(Integer id) {
+		return articleDao.getArticleForPrint(id);
 	}
 	
 	

@@ -38,11 +38,20 @@ public class MpaUsrArticleController {
 	}
 
 	@RequestMapping("/usr/article/detail")
-	@ResponseBody
-	public Article getArticle(Integer id) {
+	public String showDetail(Model model, Integer id) {
 			
-		Article article = articleService.getArticle(id);
-		return article;
+		Article article = articleService.getArticleForPrint(id);
+		
+		if(article == null) { 
+			return msgAndBack(model, id + "번 게시물이 존재하지 않습니다.");
+		}
+		
+		Board board = articleService.getBoard(article.getBoardId());
+		
+		model.addAttribute("article", article);
+		model.addAttribute("board", board);
+		
+		return "usr/article/detail";
 		
 	}
 	
@@ -77,20 +86,6 @@ public class MpaUsrArticleController {
 		return "usr/article/list";
 	}
 	
-	@RequestMapping("/usr/article/addArticle")
-	@ResponseBody
-	public ResultData addArticle(String title, String content) {
-		
-		if(Util.isEmpty(title)) {
-			return new ResultData("F-1", "제목을 입력해주세요");
-		}
-		
-		if(Util.isEmpty(content)) {
-			return new ResultData("F-2", "내용을 입력해주세요");
-		}
-		return articleService.addArticle(title, content);
-	}
-	
 	@RequestMapping("/usr/article/write")
 	public String writeArticle(Model model, @RequestParam(defaultValue = "1") int boardId) {
 		
@@ -104,6 +99,27 @@ public class MpaUsrArticleController {
 		
 		return "usr/article/write";
 		
+	}
+	
+	@RequestMapping("/usr/article/addArticle")
+	public String addArticle(Model model, int boardId, String title, String content) {
+		
+		if(Util.isEmpty(title)) {
+			return msgAndBack(model, "제목을 입력해주세요");
+		}
+		
+		if(Util.isEmpty(content)) {
+			return msgAndBack(model, "내용을 입력해주세요");
+		}
+		int memberId = 3;//임시
+		ResultData writeArticleRd = articleService.addArticle(boardId, memberId, title, content);
+		
+		if(writeArticleRd.isFail()) {
+			return msgAndBack(model, writeArticleRd.getMsg());
+		}
+		
+		String replaceUrl = "detail?id=" + writeArticleRd.getBody().get("id");
+		return msgAndReplace(model, writeArticleRd.getMsg(), replaceUrl);
 	}
 	
 	@RequestMapping("/usr/article/deleteArticle")

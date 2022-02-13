@@ -102,3 +102,52 @@ SET regDate = NOW(),
 updateDate = NOW(),
 `name` = 'FREE',
 `code` = 'free';
+
+#멤버 테이블 생성
+CREATE TABLE `member`(
+    id INT(10) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT COMMENT '번호',
+    regDate DATETIME NOT NULL COMMENT '작성날짜',
+    updateDate DATETIME NOT NULL COMMENT '수정날짜',
+    loginId CHAR(20) NOT NULL UNIQUE COMMENT '로그인아이디',
+    loginPw VARCHAR(50) NOT NULL COMMENT '로그인비번',
+    `name` CHAR(50) NOT NULL COMMENT '이름',
+    nickname CHAR(50) NOT NULL UNIQUE COMMENT '별명',
+    email CHAR(50) NOT NULL UNIQUE COMMENT '이메일',
+    cellphoneNo CHAR(15) NOT NULL UNIQUE COMMENT '휴대폰번호',
+    delStatus TINYINT(1) UNSIGNED NOT NULL DEFAULT 0 COMMENT '탈퇴여부',
+    delDate DATETIME COMMENT '탈퇴날짜'
+)ENGINE=INNODB DEFAULT CHARSET=utf8;
+
+# 회원 테스트 데이터 생성
+## 회원1 생성
+INSERT INTO `member`
+SET regDate = NOW(),
+updateDate = NOW(),
+loginId = 'user1',
+loginPw = 'user1',
+`name` = '홍길동',
+nickname = '길동이',
+email = 'duddk1551@gamil.com',
+cellphoneNo = '01012341234';
+
+## 회원2 생성
+INSERT INTO `member`
+SET regDate = NOW(),
+updateDate = NOW(),
+loginId = 'user2',
+loginPw = 'user2',
+`name` = '홍길동',
+nickname = '길동이2',
+email = 'abb@gamil.com',
+cellphoneNo = '01012345678';
+
+## 회원3 생성
+INSERT INTO `member`
+SET regDate = NOW(),
+updateDate = NOW(),
+loginId = 'user3',
+loginPw = 'user3',
+`name` = '홍길동',
+nickname = '길동이3',
+email = 'abc@gamil.com',
+cellphoneNo = '01045674567';

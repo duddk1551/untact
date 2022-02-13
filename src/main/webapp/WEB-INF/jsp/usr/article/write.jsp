@@ -4,9 +4,39 @@
 <c:set var="pageTitle"
 	value="<span><i class='fas fa-home'></i></span> <span>${board.name} ARTICLE WRITE</span>" />
 <%@ include file="../common/head.jspf"%>
+
+<script>
+let ArticleWrite__submitFormDone = false;
+function ArticleWrite__submitForm(form) {
+	if(ArticleWrite__submitFormDone) {
+		return;
+	}
+	
+	form.title.value = form.title.value.trim();
+	
+	if(form.title.value.length == 0) {
+		alert('제목을 입력해주세요.');
+		form.title.focus();
+		
+		return false;
+	}
+	
+	if(form.content.value.length == 0) {
+		alert('내용을 입력해주세요.');
+		form.content.focus();
+		
+		return false;
+	}
+	
+	form.submit();
+	ArticleWrite__submitFormDone = true;
+}
+</script>
+
 <div class="section section-article-list">
 	<div class="container mx-auto">
-		<form method="POST" action="write">
+		<form method="POST" action="addArticle" onsubmit="ArticleWrite__submitForm(this); return false;">
+			<input type="hidden" name="boardId" value="${board.id}"/>
 			<div class="form-control">
 				<label class="label"> 제목 </label>
 				<input class="input input-bordered w-full" type="text" name="title"
@@ -18,29 +48,29 @@
 					name="content" maxlength="2000" placeholder="내용을 입력해주세요."></textarea>
 			</div>
 			<div class="mt-4 btn-wrap gap-1">
-				<a href="#" class="btn btn-primary btn-sm mb-1">
+				<button type="submit" class="btn btn-primary btn-sm mb-1">
 					<span>
 						<i class="fas fa-save"></i>
 					</span>
 					&nbsp;
 					<span>작성</span>
-				</a>
+				</button>
 
-				<a onclick="if ( !confirm('삭제하시겠습니까?') ) return false;" href="#"
+				<button onclick="if ( !confirm('삭제하시겠습니까?') ) return false;" href="#"
 					class="btn btn-error btn-sm mb-1">
 					<span>
 						<i class="fas fa-trash"></i>
 					</span>
 					&nbsp;
 					<span>삭제</span>
-				</a>
-				<a href="#" class="btn btn-sm mb-1" title="자세히 보기">
+				</button>
+				<button href="#" class="btn btn-sm mb-1" title="자세히 보기">
 					<span>
 						<i class="fas fa-list"></i>
 					</span>
 					&nbsp;
 					<span>리스트</span>
-				</a>
+				</button>
 			</div>
 		</form>
 	</div>

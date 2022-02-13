@@ -28,4 +28,6 @@ public interface ArticleDao {
 
 	List<Article> getForPrintArticles(@Param("boardId") int boardId, @Param("searchKeyword") String searchKeyword, @Param("searchKeywordType") String searchKeywordType, @Param("limitFrom") int limitFrom, @Param("limitTake") int limitTake);
 
+	Article getArticleForPrint(@Param("id") Integer id);
+
 }
