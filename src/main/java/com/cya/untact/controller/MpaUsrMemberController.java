@@ -12,8 +12,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.cya.untact.dto.Article;
 import com.cya.untact.dto.Board;
+import com.cya.untact.dto.Member;
 import com.cya.untact.dto.ResultData;
 import com.cya.untact.service.ArticleService;
+import com.cya.untact.service.MemberService;
 import com.cya.untact.util.Util;
 
 import lombok.extern.slf4j.Slf4j;
@@ -22,6 +24,8 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class MpaUsrMemberController {
 	
+	@Autowired
+	private MemberService memberService;
 	
 	@RequestMapping("/usr/member/join")
 	public String showJoin(Model model) {
@@ -31,8 +35,19 @@ public class MpaUsrMemberController {
 	}
 	
 	@RequestMapping("/usr/member/addMember")
-	@ResponseBody
-	public Map addMember(String loginId, String loginPw, String name, String nickname, String email, String cellphoneNo) {
-		return Map.of("loginId", loginId, "loginPw", loginPw, "name", name, "nickname", nickname, "email", email, "cellphoneNo", cellphoneNo);
+	public String addMember(Model model, String loginId, String loginPw, String name, String nickname, String email, String cellphoneNo) {
+		Member existMember = memberService.getMemberByLoginId(loginId);
+		
+		if(existMember != null) {
+			return Util.msgAndBack(model, loginId + "(은)는 이미 사용중인 로그인 아이디 입니다.");
+		}
+		
+		ResultData joinRd = memberService.join(loginId, loginPw, name, nickname, email, cellphoneNo);
+		
+		if(joinRd.isFail()) {
+			return Util.msgAndBack(model, joinRd.getMsg());
+		}	
+			
+		return Util.msgAndReplace(model, joinRd.getMsg(), "/");
 	}
 }
