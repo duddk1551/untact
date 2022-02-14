@@ -90,7 +90,7 @@
 						</li>
 						<c:if test="${req.isLogined()}">
 						<li>
-							<a href="#" class="h-full flex items-center px-5">
+							<a href="../member/doLogout" class="h-full flex items-center px-5">
 								<span>
 									<i class="fas fa-sign-out-alt"></i>
 								</span>
@@ -110,7 +110,7 @@
 						</c:if>
 						<c:if test="${req.isLogined()}">
 						<li>
-							<a href="../member/join" class="h-full flex items-center px-5">
+							<a href="../member/mypage" class="h-full flex items-center px-5">
 								<span>
 									<i class="fas fa-sign-in-alt"></i>
 								</span>

@@ -1,5 +1,6 @@
 package com.cya.untact.controller;
 
+import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -50,6 +51,15 @@ public class MpaUsrMemberController {
 		
 		String msg = "환영합니다.";
 		return Util.msgAndReplace(model, msg, redirectUrl);
+	}
+	
+	@RequestMapping("/usr/member/doLogout")
+	public String doLogout(Model model, HttpSession session) {
+		
+		session.removeAttribute("loginedMemberId");
+		
+		String msg = "로그아웃 되었습니다.";
+		return Util.msgAndReplace(model, msg, "/");
 	}
 	
 	@RequestMapping("/usr/member/addMember")
