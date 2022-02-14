@@ -24,18 +24,6 @@ public class MpaUsrArticleController {
 	
 	@Autowired
 	private ArticleService articleService;
-	
-	private String msgAndBack(Model model, String msg) {
-		model.addAttribute("msg", msg);
-		model.addAttribute("historyBack", true);
-		return "common/redirect";
-	}
-	
-	private String msgAndReplace(Model model, String msg, String replaceUrl) {
-		model.addAttribute("msg", msg);
-		model.addAttribute("replaceUrl", replaceUrl);
-		return "common/redirect";
-	}
 
 	@RequestMapping("/usr/article/detail")
 	public String showDetail(Model model, Integer id) {
@@ -43,7 +31,7 @@ public class MpaUsrArticleController {
 		Article article = articleService.getArticleForPrint(id);
 		
 		if(article == null) { 
-			return msgAndBack(model, id + "번 게시물이 존재하지 않습니다.");
+			return Util.msgAndBack(model, id + "번 게시물이 존재하지 않습니다.");
 		}
 		
 		Board board = articleService.getBoard(article.getBoardId());
@@ -64,7 +52,7 @@ public class MpaUsrArticleController {
 		}
 		
 		if(board == null) { 
-			return msgAndBack(model, boardId + "번 게시판이 존재하지 않습니다.");
+			return Util.msgAndBack(model, boardId + "번 게시판이 존재하지 않습니다.");
 		}
 		
 		model.addAttribute("board", board);
@@ -87,12 +75,12 @@ public class MpaUsrArticleController {
 	}
 	
 	@RequestMapping("/usr/article/write")
-	public String writeArticle(Model model, @RequestParam(defaultValue = "1") int boardId) {
+	public String showArticle(Model model, @RequestParam(defaultValue = "1") int boardId) {
 		
 		Board board = articleService.getBoard(boardId);
 		
 		if(board == null) { 
-			return msgAndBack(model, boardId + "번 게시판이 존재하지 않습니다.");
+			return Util.msgAndBack(model, boardId + "번 게시판이 존재하지 않습니다.");
 		}
 		
 		model.addAttribute("board", board);
@@ -105,38 +93,38 @@ public class MpaUsrArticleController {
 	public String addArticle(Model model, int boardId, String title, String content) {
 		
 		if(Util.isEmpty(title)) {
-			return msgAndBack(model, "제목을 입력해주세요");
+			return Util.msgAndBack(model, "제목을 입력해주세요");
 		}
 		
 		if(Util.isEmpty(content)) {
-			return msgAndBack(model, "내용을 입력해주세요");
+			return Util.msgAndBack(model, "내용을 입력해주세요");
 		}
 		int memberId = 3;//임시
 		ResultData writeArticleRd = articleService.addArticle(boardId, memberId, title, content);
 		
 		if(writeArticleRd.isFail()) {
-			return msgAndBack(model, writeArticleRd.getMsg());
+			return Util.msgAndBack(model, writeArticleRd.getMsg());
 		}
 		
 		String replaceUrl = "detail?id=" + writeArticleRd.getBody().get("id");
-		return msgAndReplace(model, writeArticleRd.getMsg(), replaceUrl);
+		return Util.msgAndReplace(model, writeArticleRd.getMsg(), replaceUrl);
 	}
 	
 	@RequestMapping("/usr/article/deleteArticle")
 	public String deleteArticle(Model model, Integer id) {
 		
 		if(id == null) {
-			return msgAndBack(model, "번호를 입력해주세요");
+			return Util.msgAndBack(model, "번호를 입력해주세요");
 		}
 		
 		ResultData rd = articleService.deleteArticle(id);
 		
 		if(rd.isFail()) {
-			return msgAndBack(model, rd.getMsg());
+			return Util.msgAndBack(model, rd.getMsg());
 		}	
 		
 		String redirectUrl = "../article/list?boardId=" + rd.getBody().get("id");		
-		return msgAndReplace(model, rd.getMsg(), redirectUrl);
+		return Util.msgAndReplace(model, rd.getMsg(), redirectUrl);
 		
 	}
 

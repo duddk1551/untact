@@ -17,6 +17,8 @@ import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.springframework.ui.Model;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -341,5 +343,17 @@ public class Util {
 
 	public static String getNewUriAndEncoded(String uri, String paramName, String pramValue) {
 		return getUrlEncoded(getNewUrl(uri, paramName, pramValue));
+	}
+	
+	public static String msgAndBack(Model model, String msg) {
+		model.addAttribute("msg", msg);
+		model.addAttribute("historyBack", true);
+		return "common/redirect";
+	}
+	
+	public static String msgAndReplace(Model model, String msg, String replaceUrl) {
+		model.addAttribute("msg", msg);
+		model.addAttribute("replaceUrl", replaceUrl);
+		return "common/redirect";
 	}
 }

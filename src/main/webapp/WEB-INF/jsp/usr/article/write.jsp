@@ -21,6 +21,8 @@ function ArticleWrite__submitForm(form) {
 		return false;
 	}
 	
+	form.content.value = form.content.value.trim();
+	
 	if(form.content.value.length == 0) {
 		alert('내용을 입력해주세요.');
 		form.content.focus();
