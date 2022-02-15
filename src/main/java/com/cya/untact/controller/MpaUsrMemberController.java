@@ -34,7 +34,12 @@ public class MpaUsrMemberController {
 	}
 	
 	@RequestMapping("/usr/member/doLogin")
-	public String doLogin(HttpServletRequest req, String loginId, String loginPw, String redirectUrl) {
+	public String doLogin(HttpServletRequest req, String loginId, String loginPw, String redirectUri) {
+		
+		if(Util.isEmpty(redirectUri)) {
+			redirectUri = "/";
+		}
+		
 		Member member = memberService.getMemberByLoginId(loginId);
 		
 		if(member == null) {
@@ -50,7 +55,7 @@ public class MpaUsrMemberController {
 		
 		
 		String msg = "환영합니다.";
-		return Util.msgAndReplace(req, msg, redirectUrl);
+		return Util.msgAndReplace(req, msg, redirectUri);
 	}
 	
 	@RequestMapping("/usr/member/doLogout")

@@ -108,14 +108,14 @@ public class Util {
 		return "";
 	}
 
-	public static Map<String, Object> getParamMap(HttpServletRequest request) {
-		Map<String, Object> param = new HashMap<>();
+	public static Map<String, String> getParamMap(HttpServletRequest request) {
+		Map<String, String> param = new HashMap<>();
 
 		Enumeration<String> parameterNames = request.getParameterNames();
 
 		while (parameterNames.hasMoreElements()) {
 			String paramName = parameterNames.nextElement();
-			Object paramValue = request.getParameter(paramName);
+			String paramValue = request.getParameter(paramName);
 
 			param.put(paramName, paramValue);
 		}
@@ -123,7 +123,7 @@ public class Util {
 		return param;
 	}
 
-	public static String getUrlEncoded(String str) {
+	public static String getUriEncoded(String str) {
 		try {
 			return URLEncoder.encode(str, "UTF-8");
 		} catch (UnsupportedEncodingException e) {
@@ -301,7 +301,7 @@ public class Util {
 		return Pattern.matches("^[a-zA-Z]{1}[a-zA-Z0-9_]{4,19}$", str);
 	}
 	
-	public static String getNewUrlRemoved(String uri, String paramName) {
+	public static String getNewUriRemoved(String uri, String paramName) {
 		String deleteStrStarts = paramName + "=";
 		int delStartPos = uri.indexOf(deleteStrStarts);
 
@@ -327,8 +327,8 @@ public class Util {
 		return uri;
 	}
 
-	public static String getNewUrl(String uri, String paramName, String paramValue) {
-		uri = getNewUrlRemoved(uri, paramName);
+	public static String getNewUri(String uri, String paramName, String paramValue) {
+		uri = getNewUriRemoved(uri, paramName);
 
 		if (uri.contains("?")) {
 			uri += "&" + paramName + "=" + paramValue;
@@ -342,7 +342,7 @@ public class Util {
 	}
 
 	public static String getNewUriAndEncoded(String uri, String paramName, String pramValue) {
-		return getUrlEncoded(getNewUrl(uri, paramName, pramValue));
+		return getUriEncoded(getNewUri(uri, paramName, pramValue));
 	}
 	
 	public static String msgAndBack(HttpServletRequest req, String msg) {
@@ -351,9 +351,9 @@ public class Util {
 		return "common/redirect";
 	}
 	
-	public static String msgAndReplace(HttpServletRequest req, String msg, String replaceUrl) {
+	public static String msgAndReplace(HttpServletRequest req, String msg, String replaceUri) {
 		req.setAttribute("msg", msg);
-		req.setAttribute("replaceUrl", replaceUrl);
+		req.setAttribute("replaceUri", replaceUri);
 		return "common/redirect";
 	}
 }

@@ -13,9 +13,9 @@ if(historyBack) {
 	history.back();	
 }
 
-const replaceUrl = '${replaceUrl}'.trim();
-if(replaceUrl) {
-	location.replace(replaceUrl);
+const replaceUri = '${replaceUri}'.trim();
+if(replaceUri) {
+	location.replace(replaceUri);
 }
 
 </script>

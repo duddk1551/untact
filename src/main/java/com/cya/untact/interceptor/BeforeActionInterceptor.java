@@ -1,5 +1,7 @@
 package com.cya.untact.interceptor;
 
+import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -24,6 +26,9 @@ public class BeforeActionInterceptor implements HandlerInterceptor {
 	
 	@Override
 	public boolean preHandle(HttpServletRequest req, HttpServletResponse resp, Object handler) throws Exception {
+		
+		Map<String,String> paramMap = Util.getParamMap(req);
+		
 		HttpSession session = req.getSession();
 		
 		Member loginedMember = null;
@@ -36,14 +41,14 @@ public class BeforeActionInterceptor implements HandlerInterceptor {
 			loginedMember = memberService.getMemberById(loginedMemberId);
 		}
 
-		String currentUrl = req.getRequestURI();
+		String currentUri = req.getRequestURI();
 		String queryString = req.getQueryString();
 
 		if (queryString != null && queryString.length() > 0) {
-			currentUrl += "?" + queryString;
+			currentUri += "?" + queryString;
 		}
 		
-		req.setAttribute("rq", new Rq(loginedMember, currentUrl));
+		req.setAttribute("rq", new Rq(loginedMember, currentUri, paramMap));
 
 		return HandlerInterceptor.super.preHandle(req, resp, handler);
 	}

@@ -44,7 +44,7 @@
 				<nav class="menu-box-1">
 					<ul class="flex h-full">
 						<li>
-							<a href="./main" class="h-full flex items-center px-5">
+							<a href="../home/main" class="h-full flex items-center px-5">
 								<span>
 									<i class="fas fa-house-user"></i>
 								</span>
@@ -100,7 +100,7 @@
 						</c:if>
 						<c:if test="${rq.isNotLogined()}">
 						<li>
-							<a href="../member/login" class="h-full flex items-center px-5">
+							<a href="${rq.getLoginPageUri()}" class="h-full flex items-center px-5">
 								<span>
 									<i class="fas fa-sign-in-alt"></i>
 								</span>

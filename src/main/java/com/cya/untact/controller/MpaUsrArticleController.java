@@ -108,8 +108,8 @@ public class MpaUsrArticleController {
 			return Util.msgAndBack(req, writeArticleRd.getMsg());
 		}
 		
-		String replaceUrl = "detail?id=" + writeArticleRd.getBody().get("id");
-		return Util.msgAndReplace(req, writeArticleRd.getMsg(), replaceUrl);
+		String replaceUri = "detail?id=" + writeArticleRd.getBody().get("id");
+		return Util.msgAndReplace(req, writeArticleRd.getMsg(), replaceUri);
 	}
 	
 	@RequestMapping("/usr/article/deleteArticle")
@@ -125,8 +125,8 @@ public class MpaUsrArticleController {
 			return Util.msgAndBack(req, rd.getMsg());
 		}	
 		
-		String redirectUrl = "../article/list?boardId=" + rd.getBody().get("id");		
-		return Util.msgAndReplace(req, rd.getMsg(), redirectUrl);
+		String redirectUri = "../article/list?boardId=" + rd.getBody().get("id");		
+		return Util.msgAndReplace(req, rd.getMsg(), redirectUri);
 		
 	}
 
