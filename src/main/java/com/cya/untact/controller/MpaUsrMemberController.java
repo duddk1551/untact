@@ -24,25 +24,25 @@ public class MpaUsrMemberController {
 	private MemberService memberService;
 	
 	@RequestMapping("/usr/member/join")
-	public String showJoin(Model model) {
+	public String showJoin(HttpServletRequest req) {
 		return "usr/member/join";
 	}
 	
 	@RequestMapping("/usr/member/login")
-	public String showLogin(Model model) {
+	public String showLogin(HttpServletRequest req) {
 		return "usr/member/login";
 	}
 	
 	@RequestMapping("/usr/member/doLogin")
-	public String doLogin(Model model, HttpServletRequest req, String loginId, String loginPw, String redirectUrl) {
+	public String doLogin(HttpServletRequest req, String loginId, String loginPw, String redirectUrl) {
 		Member member = memberService.getMemberByLoginId(loginId);
 		
 		if(member == null) {
-			return Util.msgAndBack(model, loginId + "(은)는 존재하지 않는 아이디 입니다.");
+			return Util.msgAndBack(req, loginId + "(은)는 존재하지 않는 아이디 입니다.");
 		}
 		
 		if(member.getLoginPw().equals(loginPw) == false) {
-			return Util.msgAndBack(model, "비밀번호가 일치하지 않습니다.");
+			return Util.msgAndBack(req, "비밀번호가 일치하지 않습니다.");
 		}
 		
 		HttpSession session = req.getSession();
@@ -50,32 +50,32 @@ public class MpaUsrMemberController {
 		
 		
 		String msg = "환영합니다.";
-		return Util.msgAndReplace(model, msg, redirectUrl);
+		return Util.msgAndReplace(req, msg, redirectUrl);
 	}
 	
 	@RequestMapping("/usr/member/doLogout")
-	public String doLogout(Model model, HttpSession session) {
+	public String doLogout(HttpServletRequest req, HttpSession session) {
 		
 		session.removeAttribute("loginedMemberId");
 		
 		String msg = "로그아웃 되었습니다.";
-		return Util.msgAndReplace(model, msg, "/");
+		return Util.msgAndReplace(req, msg, "/");
 	}
 	
 	@RequestMapping("/usr/member/addMember")
-	public String addMember(Model model, String loginId, String loginPw, String name, String nickname, String email, String cellphoneNo) {
+	public String addMember(HttpServletRequest req, String loginId, String loginPw, String name, String nickname, String email, String cellphoneNo) {
 		Member existMember = memberService.getMemberByLoginId(loginId);
 		
 		if(existMember != null) {
-			return Util.msgAndBack(model, loginId + "(은)는 이미 사용중인 로그인 아이디 입니다.");
+			return Util.msgAndBack(req, loginId + "(은)는 이미 사용중인 로그인 아이디 입니다.");
 		}
 		
 		ResultData joinRd = memberService.join(loginId, loginPw, name, nickname, email, cellphoneNo);
 		
 		if(joinRd.isFail()) {
-			return Util.msgAndBack(model, joinRd.getMsg());
+			return Util.msgAndBack(req, joinRd.getMsg());
 		}	
 			
-		return Util.msgAndReplace(model, joinRd.getMsg(), "/");
+		return Util.msgAndReplace(req, joinRd.getMsg(), "/");
 	}
 }
