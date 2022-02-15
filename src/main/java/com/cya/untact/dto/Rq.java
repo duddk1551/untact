@@ -3,12 +3,16 @@ package com.cya.untact.dto;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import com.cya.untact.util.Util;
+
 public class Rq {
 	
+	private String currentUrl;
 	private Member loginedMember;
 	
-	public Rq(Member loginedMember) {
+	public Rq(Member loginedMember, String currentUrl) {
 		this.loginedMember = loginedMember;
+		this.currentUrl = currentUrl;
 		
 	}
 	
@@ -33,6 +37,15 @@ public class Rq {
 		if(isNotLogined()) return "";
 		
 		return loginedMember.getNickname();
+	}
+
+	public String getEncodedCurrentUrl() {
+		return Util.getUrlEncoded(getCurrentUrl());
+	}
+
+	private String getCurrentUrl() {
+		return currentUrl;
+		
 	}
 
 }

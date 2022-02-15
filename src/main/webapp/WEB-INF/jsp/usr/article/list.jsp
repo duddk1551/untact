@@ -20,7 +20,7 @@
 		</div>
 		<hr />
 		<div class="plain-link-wrap gap-3 mt-4">
-			<a href="write?boardId?=${board.id}" class="plain-link">
+			<a href="write?boardId=${board.id}" class="plain-link">
 				<span>
 					<i class="fas fa-edit"></i>
 				</span>

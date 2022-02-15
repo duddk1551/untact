@@ -11,6 +11,7 @@ import org.springframework.web.servlet.HandlerInterceptor;
 import com.cya.untact.dto.Member;
 import com.cya.untact.dto.Rq;
 import com.cya.untact.service.MemberService;
+import com.cya.untact.util.Util;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -34,8 +35,15 @@ public class BeforeActionInterceptor implements HandlerInterceptor {
 		if(loginedMemberId != 0) {
 			loginedMember = memberService.getMemberById(loginedMemberId);
 		}
+
+		String currentUrl = req.getRequestURI();
+		String queryString = req.getQueryString();
+
+		if (queryString != null && queryString.length() > 0) {
+			currentUrl += "?" + queryString;
+		}
 		
-		req.setAttribute("rq", new Rq(loginedMember));
+		req.setAttribute("rq", new Rq(loginedMember, currentUrl));
 
 		return HandlerInterceptor.super.preHandle(req, resp, handler);
 	}
