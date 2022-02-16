@@ -11,9 +11,24 @@ spring:
       url: jdbc:log4jdbc:mysql://127.0.0.1:3308/insta?useUnicode=true&characterEncoding=utf8&autoReconnect=true&serverTimezone=Asia/Seoul&useOldAliasMetadataBehavior=true&zeroDateTimeNehavior=convertToNull
       username: cyast
       password: cya1234
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: duddk1551@gmail.com
+    password: jftmofrkhuuqbbxw
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
 mybatis:
   type-aliases-package: com.cya.untact.dto
 custom:
+  siteMainUri: "http://localhost:8024/"
+  siteName: "IVORY"
+  emailFrom: no-reply@localhost
+  emailFromName: IVORY NOTICE ROBOT
   logging:
     dir: log
     level: debug

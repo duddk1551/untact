@@ -28,7 +28,7 @@
 		}
 
 		form.submit();
-		MemberLogin__submitFormDone = true;
+		MemberFindLoginId__submitFormDone = true;
 	}
 </script>
 

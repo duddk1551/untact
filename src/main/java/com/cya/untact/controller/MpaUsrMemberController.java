@@ -38,6 +38,57 @@ public class MpaUsrMemberController {
 		return "usr/member/findLoginId";
 	}
 	
+	@RequestMapping("/usr/member/findLoginPw")
+	public String showFindLoginPw(HttpServletRequest req) {
+		return "usr/member/findLoginPw";
+	}
+	
+	@RequestMapping("/usr/member/doFindLoginId")
+	public String doFindLoginId(HttpServletRequest req, String name, String email, String redirectUri) {
+		
+		if(Util.isEmpty(redirectUri)) {
+			redirectUri = "/";
+		}
+		
+		Member member = memberService.getMemberByNameAndEmail(name, email);
+		
+		if(member == null) {
+			return Util.msgAndBack(req, "일치하는 회원이 존재하지 않습니다.");
+		}
+		
+		return Util.msgAndBack(req, String.format("회원님읜 아이디는 `%s` 입니다.", member.getLoginId()));
+
+	}
+	
+	@RequestMapping("/usr/member/doFindLoginPw")
+	public String doFindLoginPw(HttpServletRequest req, String loginId, String name, String email, String redirectUri) {
+		
+		if(Util.isEmpty(redirectUri)) {
+			redirectUri = "/";
+		}
+		
+		Member member = memberService.getMemberByLoginId(loginId);
+		
+		if(member == null) {
+			return Util.msgAndBack(req, "일치하는 회원이 존재하지 않습니다.");
+		}
+		
+		if(member.getName().equals(name) == false) {
+			return Util.msgAndBack(req, "일치하는 회원이 존재하지 않습니다.");
+		}
+		
+		if(member.getEmail().equals(email) == false) {
+			return Util.msgAndBack(req, "일치하는 회원이 존재하지 않습니다.");
+		}
+		
+		//String tempLoginPw = Util.getTempPassword(6);
+		
+		ResultData sendTempLoginPwByEmailRd = memberService.sendTempLoginPwByEmail(member);
+		
+		return Util.msgAndReplace(req, sendTempLoginPwByEmailRd.getMsg(), redirectUri);
+
+	}
+	
 	@RequestMapping("/usr/member/doLogin")
 	public String login(HttpServletRequest req, String loginId, String loginPw, String redirectUri) {
 		
@@ -61,23 +112,6 @@ public class MpaUsrMemberController {
 		
 		String msg = "환영합니다.";
 		return Util.msgAndReplace(req, msg, redirectUri);
-	}
-	
-	@RequestMapping("/usr/member/doFindLoginId")
-	public String doFindLoginId(HttpServletRequest req, String name, String email, String redirectUri) {
-		
-		if(Util.isEmpty(redirectUri)) {
-			redirectUri = "/";
-		}
-		
-		Member member = memberService.getMemberByNameAndEmail(name, email);
-		
-		if(member == null) {
-			return Util.msgAndBack(req, "일치하는 회원이 존재하지 않습니다.");
-		}
-		
-		return Util.msgAndBack(req, String.format("회원님읜 아이디는 `%s` 입니다.", member.getLoginId()));
-
 	}
 	
 	@RequestMapping("/usr/member/doLogout")

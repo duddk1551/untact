@@ -16,6 +16,9 @@ public interface MemberDao {
 	void join(@Param("loginId") String loginId, @Param("loginPw") String loginPw, @Param("name") String name, @Param("nickname") String nickname
 			, @Param("email") String email, @Param("cellphoneNo") String cellphoneNo);
 	
+	void modify(@Param("id") int id, @Param("loginPw") String loginPw, @Param("name") String name, @Param("nickname") String nickname
+			, @Param("email") String email, @Param("cellphoneNo") String cellphoneNo);
+	
 	int getLastInsertId();
 
 	Member getMemberByNameAndEmail(@Param("name") String name, @Param("email") String email);

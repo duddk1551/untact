@@ -38,6 +38,10 @@ public class WebMvcConfig implements WebMvcConfigurer {
 				.addPathPatterns("/usr/article/modifyArticle");
 		
 		registry.addInterceptor(needToLogoutInterceptor)
+				.addPathPatterns("/usr/member/findLoginId")
+				.addPathPatterns("/usr/member/doFindLoginId")
+				.addPathPatterns("/usr/member/findLoginPw")
+				.addPathPatterns("/usr/member/doFindLoginPw")
 				.addPathPatterns("/usr/member/login")
 				.addPathPatterns("/usr/member/doLogin")
 				.addPathPatterns("/usr/member/join")
