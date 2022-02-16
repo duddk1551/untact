@@ -56,7 +56,23 @@ function MemberLogin__submitForm(form) {
 					&nbsp;
 					<span>로그인</span>
 				</button>
-
+				
+				<a href="../member/findLoginId" type="submit" class="btn btn-link btn-sm mb-1">
+					<span>
+						<i class='fas fa-sign-in-alt'></i>
+					</span>
+					&nbsp;
+					<span>아이디 찾기</span>
+				</a>
+				
+				<a href="../member/findLoginPw" type="submit" class="btn btn-link btn-sm mb-1">
+					<span>
+						<i class='fas fa-sign-in-alt'></i>
+					</span>
+					&nbsp;
+					<span>비밀번호 찾기</span>
+				</a>
+				
 				<button href="#" class="btn btn-sm mb-1">
 					<span>
 						<i class="fas fa-house-user"></i>

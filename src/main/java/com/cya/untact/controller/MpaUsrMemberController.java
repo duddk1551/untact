@@ -33,8 +33,13 @@ public class MpaUsrMemberController {
 		return "usr/member/login";
 	}
 	
+	@RequestMapping("/usr/member/findLoginId")
+	public String showFindLoginId(HttpServletRequest req) {
+		return "usr/member/findLoginId";
+	}
+	
 	@RequestMapping("/usr/member/doLogin")
-	public String doLogin(HttpServletRequest req, String loginId, String loginPw, String redirectUri) {
+	public String login(HttpServletRequest req, String loginId, String loginPw, String redirectUri) {
 		
 		if(Util.isEmpty(redirectUri)) {
 			redirectUri = "/";
@@ -58,8 +63,25 @@ public class MpaUsrMemberController {
 		return Util.msgAndReplace(req, msg, redirectUri);
 	}
 	
+	@RequestMapping("/usr/member/doFindLoginId")
+	public String doFindLoginId(HttpServletRequest req, String name, String email, String redirectUri) {
+		
+		if(Util.isEmpty(redirectUri)) {
+			redirectUri = "/";
+		}
+		
+		Member member = memberService.getMemberByNameAndEmail(name, email);
+		
+		if(member == null) {
+			return Util.msgAndBack(req, "일치하는 회원이 존재하지 않습니다.");
+		}
+		
+		return Util.msgAndBack(req, String.format("회원님읜 아이디는 `%s` 입니다.", member.getLoginId()));
+
+	}
+	
 	@RequestMapping("/usr/member/doLogout")
-	public String doLogout(HttpServletRequest req, HttpSession session) {
+	public String logout(HttpServletRequest req, HttpSession session) {
 		
 		session.removeAttribute("loginedMemberId");
 		

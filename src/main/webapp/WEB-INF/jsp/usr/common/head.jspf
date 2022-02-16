@@ -97,18 +97,6 @@
 								<span class="hidden md:block">&nbsp;LOGOUT</span>
 							</a>
 						</li>
-						</c:if>
-						<c:if test="${rq.isNotLogined()}">
-						<li>
-							<a href="${rq.getLoginPageUri()}" class="h-full flex items-center px-5">
-								<span>
-									<i class="fas fa-sign-in-alt"></i>
-								</span>
-								<span class="hidden md:block">&nbsp;LOGIN</span>
-							</a>
-						</li>
-						</c:if>
-						<c:if test="${rq.isLogined()}">
 						<li>
 							<a href="../member/mypage" class="h-full flex items-center px-5">
 								<span>
@@ -119,6 +107,14 @@
 						</li>
 						</c:if>
 						<c:if test="${rq.isNotLogined()}">
+						<li>
+							<a href="${rq.getLoginPageUri()}" class="h-full flex items-center px-5">
+								<span>
+									<i class="fas fa-sign-in-alt"></i>
+								</span>
+								<span class="hidden md:block">&nbsp;LOGIN</span>
+							</a>
+						</li>
 						<li>
 							<a href="../member/join" class="h-full flex items-center px-5">
 								<span>

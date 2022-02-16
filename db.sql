@@ -127,7 +127,7 @@ loginId = 'user1',
 loginPw = 'user1',
 `name` = '홍길동',
 nickname = '길동이',
-email = 'duddk1551@gamil.com',
+email = 'duddk1551@gmail.com',
 cellphoneNo = '01012341234';
 
 ## 회원2 생성
@@ -138,7 +138,7 @@ loginId = 'user2',
 loginPw = 'user2',
 `name` = '홍길동',
 nickname = '길동이2',
-email = 'abb@gamil.com',
+email = 'abb@gmail.com',
 cellphoneNo = '01012345678';
 
 ## 회원3 생성
@@ -149,5 +149,5 @@ loginId = 'user3',
 loginPw = 'user3',
 `name` = '홍길동',
 nickname = '길동이3',
-email = 'abc@gamil.com',
+email = 'abc@gmail.com',
 cellphoneNo = '01045674567';
