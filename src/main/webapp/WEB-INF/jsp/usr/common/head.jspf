@@ -44,7 +44,7 @@
 				<nav class="menu-box-1">
 					<ul class="flex h-full">
 						<li>
-							<a href="../home/main" class="h-full flex items-center px-5">
+							<a href="/" class="h-full flex items-center px-5">
 								<span>
 									<i class="fas fa-house-user"></i>
 								</span>

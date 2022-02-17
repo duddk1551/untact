@@ -42,6 +42,11 @@ public class MpaUsrMemberController {
 		return "usr/member/modify";
 	}
 	
+	@RequestMapping("/usr/member/checkPassword")
+	public String showCheckPassword(HttpServletRequest req) {
+		return "usr/member/checkPassword";
+	}
+	
 	@RequestMapping("/usr/member/findLoginId")
 	public String showFindLoginId(HttpServletRequest req) {
 		return "usr/member/findLoginId";
@@ -90,11 +95,21 @@ public class MpaUsrMemberController {
 			return Util.msgAndBack(req, "일치하는 회원이 존재하지 않습니다.");
 		}
 		
-		//String tempLoginPw = Util.getTempPassword(6);
-		
 		ResultData sendTempLoginPwByEmailRd = memberService.sendTempLoginPwByEmail(member);
 		
 		return Util.msgAndReplace(req, sendTempLoginPwByEmailRd.getMsg(), redirectUri);
+
+	}
+	
+	@RequestMapping("/usr/member/doCheckPassword")
+	public String doCheckPassword(HttpServletRequest req, String loginPw, String redirectUri) {
+		Member loginedMember = ((Rq)req.getAttribute("rq")).getLoginedMember();
+		
+		if(loginedMember.getLoginPw().equals(loginPw) == false) {
+			return Util.msgAndBack(req, "비밀번호가 일치하지 않습니다.");
+		}
+		log.debug("redirectUri : " + redirectUri);
+		return Util.msgAndReplace(req, "", redirectUri);
 
 	}
 	
@@ -136,12 +151,11 @@ public class MpaUsrMemberController {
 	public String modifyMember(HttpServletRequest req, String loginPw, String name, String nickname, String email, String cellphoneNo) {
 		
 		int id = ((Rq)req.getAttribute("rq")).getLoginedMemberId();
-		log.debug("로그인 패스워드!!!!!! : [" + loginPw + "]");
+
 		if(loginPw != null && loginPw.trim().length() == 0) {
 			loginPw = null;
 		}
-		
-		log.debug("로그인 패스워드!!!!!! : [" + loginPw + "]");
+
 		ResultData modifyRd = memberService.modifyMember(id, loginPw, name, nickname, email, cellphoneNo);
 		
 		if(modifyRd.isFail()) {
