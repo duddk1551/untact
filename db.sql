@@ -151,3 +151,7 @@ loginPw = 'user3',
 nickname = '길동이3',
 email = 'abc@gmail.com',
 cellphoneNo = '01045674567';
+
+#기존 회원의 비밀번호를 암호화해서 저장
+UPDATE MEMBER
+SET loginPw = SHA2(loginPw, 256);

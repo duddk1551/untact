@@ -5,6 +5,8 @@
 	value="<span><i class='fas fa-sign-in-alt'></i></span> <span>MEMBER LOGIN</span>" />
 <%@ include file="../common/head.jspf"%>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/js-sha256/0.9.0/sha256.min.js"></script>
+
 <script>
 let MemberLogin__submitFormDone = false;
 function MemberLogin__submitForm(form) {
@@ -19,13 +21,16 @@ function MemberLogin__submitForm(form) {
 		
 		return false;
 	}
-	form.loginPw.value = form.loginPw.value.trim();
-	if(form.loginPw.value.length == 0) {
+	form.inputLoginPw.value = form.inputLoginPw.value.trim();
+	if(form.inputLoginPw.value.length == 0) {
 		alert('비밀번호를 입력해주세요.');
-		form.loginPw.focus();
+		form.inputLoginPw.focus();
 		
 		return false;
 	}
+	
+	form.loginPw.value = sha256(form.inputLoginPw.value);
+	form.inputLoginPw.value = '';
 	
 	form.submit();
 	MemberLogin__submitFormDone = true;
@@ -36,6 +41,7 @@ function MemberLogin__submitForm(form) {
 	<div class="container mx-auto">
 		<form method="POST" action="doLogin" onsubmit="MemberLogin__submitForm(this); return false;">
 			<input type="hidden" name="redirectUri" value="${param.afterLoginUri}" />
+			<input type="hidden" name="loginPw" />
 			<div class="form-control">
 				<label class="label"> 아이디 </label>
 				<input class="input input-bordered w-full" type="text" name="loginId"
@@ -43,8 +49,8 @@ function MemberLogin__submitForm(form) {
 			</div>
 			<div class="form-control">
 				<label class="label"> 비밀번호 </label>
-				<input class="input input-bordered w-full" type="password" name="loginPw"
-					maxlength="30" placeholder="비밀번호를 입력해주세요." />
+				<input class="input input-bordered w-full" type="password" name="inputLoginPw"
+					maxlength="100" placeholder="비밀번호를 입력해주세요." />
 			</div>
 			
 			
