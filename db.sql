@@ -109,7 +109,7 @@ CREATE TABLE `member`(
     regDate DATETIME NOT NULL COMMENT '작성날짜',
     updateDate DATETIME NOT NULL COMMENT '수정날짜',
     loginId CHAR(20) NOT NULL UNIQUE COMMENT '로그인아이디',
-    loginPw VARCHAR(50) NOT NULL COMMENT '로그인비번',
+    loginPw VARCHAR(100) NOT NULL COMMENT '로그인비번',
     `name` CHAR(50) NOT NULL COMMENT '이름',
     nickname CHAR(50) NOT NULL UNIQUE COMMENT '별명',
     email CHAR(50) NOT NULL UNIQUE COMMENT '이메일',

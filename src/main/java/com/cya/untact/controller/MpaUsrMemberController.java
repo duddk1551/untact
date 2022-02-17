@@ -102,7 +102,7 @@ public class MpaUsrMemberController {
 			return Util.msgAndBack(req, loginId + "(은)는 존재하지 않는 아이디 입니다.");
 		}
 		
-		if(member.getLoginPw().equals(loginPw) == false) {
+		if(member.getLoginPw().equals(Util.sha256(loginPw)) == false) {
 			return Util.msgAndBack(req, "비밀번호가 일치하지 않습니다.");
 		}
 		
