@@ -44,7 +44,7 @@ function MemberLogin__submitForm(form) {
 			<input type="hidden" name="loginPw" />
 			<div class="form-control">
 				<label class="label"> 아이디 </label>
-				<input class="input input-bordered w-full" type="text" name="loginId"
+				<input autofocus class="input input-bordered w-full" type="text" name="loginId"
 					maxlength="30" placeholder="아이디를 입력해주세요." />
 			</div>
 			<div class="form-control">

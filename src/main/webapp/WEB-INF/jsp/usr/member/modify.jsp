@@ -2,44 +2,36 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <c:set var="pageTitle"
-	value="<span><i class='fas fa-home'></i></span> <span>MEMBER JOIN</span>" />
+	value="<span><i class='fas fa-home'></i></span> <span>MEMBER MODIFY</span>" />
 <%@ include file="../common/head.jspf"%>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/js-sha256/0.9.0/sha256.min.js"></script>
 
 <script>
-let MemberJoin__submitFormDone = false;
-function MemberJoin__submitForm(form) {
-	if(MemberJoin__submitFormDone) {
+let MemberModify__submitFormDone = false;
+function MemberModify__submitForm(form) {
+	if(MemberModify__submitFormDone) {
 		return;
 	}
 	
-	form.loginId.value = form.loginId.value.trim();
-	if(form.loginId.value.length == 0) {
-		alert('아이디를 입력해주세요.');
-		form.loginId.focus();
-		
-		return false;
-	}
 	form.inputLoginPw.value = form.inputLoginPw.value.trim();
-	if(form.inputLoginPw.value.length == 0) {
-		alert('비밀번호를 입력해주세요.');
-		form.inputLoginPw.focus();
+	if(form.inputLoginPw.value.length > 0) {
 		
-		return false;
-	}
-	form.loginPwComfirm.value = form.loginPwComfirm.value.trim();
-	if(form.loginPwComfirm.value.length == 0) {
-		alert('비밀번호확인을 입력해주세요.');
-		form.loginPwComfirm.focus();
+		form.loginPwComfirm.value = form.loginPwComfirm.value.trim();
+		if(form.loginPwComfirm.value.length == 0) {
+			alert('비밀번호확인을 입력해주세요.');
+			form.loginPwComfirm.focus();
+			
+			return false;
+		}
 		
-		return false;
-	}
-	if(form.inputLoginPw.value != form.loginPwComfirm.value) {
-		alert('비밀번호가 일치하지 않습니다.');
-		form.loginPwComfirm.focus();
+		if(form.inputLoginPw.value != form.loginPwComfirm.value) {
+			alert('비밀번호가 일치하지 않습니다.');
+			form.loginPwComfirm.focus();
+			
+			return false;
+		}
 		
-		return false;
 	}
 	
 	form.name.value = form.name.value.trim();
@@ -71,23 +63,26 @@ function MemberJoin__submitForm(form) {
 		return false;
 	}
 	
-	form.loginPw.value = sha256(form.inputLoginPw.value);
-	form.inputLoginPw.value = '';
-	form.loginPwComfirm.value = '';
+	if(form.inputLoginPw.value.length > 0) {
+		form.loginPw.value = sha256(form.inputLoginPw.value);
+		form.inputLoginPw.value = '';
+		form.loginPwComfirm.value = '';
+	}
 	
 	form.submit();
-	MemberJoin__submitFormDone = true;
+	MemberModify__submitFormDone = true;
 }
 </script>
 
-<div class="section section-join px-2">
+<div class="section section-member-modify px-2">
 	<div class="container mx-auto">
-		<form method="POST" action="addMember" onsubmit="MemberJoin__submitForm(this); return false;">
+		<form method="POST" action="doModify" onsubmit="MemberModify__submitForm(this); return false;">
 			<input type="hidden" name="loginPw" />
 			<div class="form-control">
 				<label class="label"> 아이디 </label>
-				<input autofocus class="input input-bordered w-full" type="text" name="loginId"
-					maxlength="30" placeholder="아이디를 입력해주세요." />
+				<div class="plain-text">
+					${rq.loginedMember.loginId}
+				</div>
 			</div>
 			<div class="form-control">
 				<label class="label"> 비밀번호 </label>
@@ -102,22 +97,22 @@ function MemberJoin__submitForm(form) {
 			<div class="form-control">
 				<label class="label"> 이름 </label>
 				<input class="input input-bordered w-full" type="text" name="name"
-					maxlength="30" placeholder="이름을 입력해주세요." />
+					maxlength="30" placeholder="이름을 입력해주세요." value="${rq.loginedMember.name}"/>
 			</div>
 			<div class="form-control">
 				<label class="label"> 닉네임 </label>
 				<input class="input input-bordered w-full" type="text" name="nickname"
-					maxlength="30" placeholder="닉네임을 입력해주세요." />
+					maxlength="30" placeholder="닉네임을 입력해주세요."  value="${rq.loginedMember.nickname}"/>
 			</div>
 			<div class="form-control">
 				<label class="label"> 이메일 </label>
 				<input class="input input-bordered w-full" type="email" name="email"
-					maxlength="50" placeholder="이메일을 입력해주세요." />
+					maxlength="50" placeholder="이메일을 입력해주세요." value="${rq.loginedMember.email}"/>
 			</div>
 			<div class="form-control">
 				<label class="label"> 전화번호 </label>
 				<input class="input input-bordered w-full" type="tel" name="cellphoneNo"
-					maxlength="30" placeholder="전화번호를 입력해주세요." />
+					maxlength="30" placeholder="전화번호를 입력해주세요." value="${rq.loginedMember.cellphoneNo}"/>
 			</div>
 			
 			<div class="mt-4 btn-wrap gap-1">
@@ -126,16 +121,24 @@ function MemberJoin__submitForm(form) {
 						<i class="fas fa-user-plus"></i>
 					</span>
 					&nbsp;
-					<span>가입</span>
+					<span>수정</span>
 				</button>
+				
+				<a href="../member/mypage" class="btn btn-link btn-sm mb-1">
+					<span>
+						<i class="fas fa-house-user"></i>
+					</span>
+					&nbsp;
+					<span>마이페이지</span>
+				</a>
 
-				<button href="#" class="btn btn-sm mb-1">
+				<a href="/" class="btn btn-link btn-sm mb-1">
 					<span>
 						<i class="fas fa-house-user"></i>
 					</span>
 					&nbsp;
 					<span>홈</span>
-				</button>
+				</a>
 			</div>
 		</form>
 	</div>

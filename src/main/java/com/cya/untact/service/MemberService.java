@@ -70,4 +70,10 @@ public class MemberService {
         memberDao.modify(actor.getId(), tempPassword, null, null, null, null);
     }
 
+	public ResultData modifyMember(int id, String loginPw, String name, String nickname, String email, String cellphoneNo) {
+		memberDao.modify(id, loginPw, name, nickname, email, cellphoneNo);
+		
+		return new ResultData("S-1", "회원정보가 수정되었습니다.", "id", id);
+	}
+
 }

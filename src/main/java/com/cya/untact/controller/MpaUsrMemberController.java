@@ -1,16 +1,15 @@
 package com.cya.untact.controller;
 
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.cya.untact.dto.Member;
 import com.cya.untact.dto.ResultData;
+import com.cya.untact.dto.Rq;
 import com.cya.untact.service.MemberService;
 import com.cya.untact.util.Util;
 
@@ -36,6 +35,11 @@ public class MpaUsrMemberController {
 	@RequestMapping("/usr/member/login")
 	public String showLogin(HttpServletRequest req) {
 		return "usr/member/login";
+	}
+	
+	@RequestMapping("/usr/member/modify")
+	public String showModify(HttpServletRequest req) {
+		return "usr/member/modify";
 	}
 	
 	@RequestMapping("/usr/member/findLoginId")
@@ -126,6 +130,25 @@ public class MpaUsrMemberController {
 		
 		String msg = "로그아웃 되었습니다.";
 		return Util.msgAndReplace(req, msg, "/");
+	}
+	
+	@RequestMapping("/usr/member/doModify")
+	public String modifyMember(HttpServletRequest req, String loginPw, String name, String nickname, String email, String cellphoneNo) {
+		
+		int id = ((Rq)req.getAttribute("rq")).getLoginedMemberId();
+		log.debug("로그인 패스워드!!!!!! : [" + loginPw + "]");
+		if(loginPw != null && loginPw.trim().length() == 0) {
+			loginPw = null;
+		}
+		
+		log.debug("로그인 패스워드!!!!!! : [" + loginPw + "]");
+		ResultData modifyRd = memberService.modifyMember(id, loginPw, name, nickname, email, cellphoneNo);
+		
+		if(modifyRd.isFail()) {
+			return Util.msgAndBack(req, modifyRd.getMsg());
+		}	
+			
+		return Util.msgAndReplace(req, modifyRd.getMsg(), "/");
 	}
 	
 	@RequestMapping("/usr/member/addMember")
