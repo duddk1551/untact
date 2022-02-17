@@ -23,6 +23,11 @@ public class MpaUsrMemberController {
 	@Autowired
 	private MemberService memberService;
 	
+	@RequestMapping("/usr/member/mypage")
+	public String showMypage(HttpServletRequest req) {
+		return "usr/member/mypage";
+	}
+	
 	@RequestMapping("/usr/member/join")
 	public String showJoin(HttpServletRequest req) {
 		return "usr/member/join";

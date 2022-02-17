@@ -39,7 +39,7 @@
 	}
 </script>
 
-<div class="section section-article-list px-2">
+<div class="section section-find-loginPw px-2">
 	<div class="container mx-auto">
 		<form method="POST" action="doFindLoginPw"
 			onsubmit="MemberLogin__submitForm(this); return false;">
