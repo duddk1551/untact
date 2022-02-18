@@ -38,7 +38,17 @@ public class MpaUsrMemberController {
 	}
 	
 	@RequestMapping("/usr/member/modify")
-	public String showModify(HttpServletRequest req) {
+	public String showModify(HttpServletRequest req, String modifyPrivateAuthCode) {
+		
+		Member loginedMember = ((Rq)req.getAttribute("rq")).getLoginedMember();
+		ResultData checkValidModifyPrivateAuthCodeRd = memberService.checkValidModifyPrivateAuthCode(loginedMember.getId(), modifyPrivateAuthCode);
+		
+		if(checkValidModifyPrivateAuthCodeRd.isFail()) {
+			return Util.msgAndBack(req, checkValidModifyPrivateAuthCodeRd.getMsg());
+		}
+		
+		log.debug("checkValidModifyPrivateAuthCodeRd : " + checkValidModifyPrivateAuthCodeRd);
+		
 		return "usr/member/modify";
 	}
 	

@@ -21,6 +21,8 @@ public class MemberService {
 	private MemberDao memberDao;
 	@Autowired
 	private MailService mailService;
+	@Autowired
+	private AttrService attrService;
 
 	public Member getMemberByLoginId(String loginId) {
 		return memberDao.getMemberByLoginId(loginId);
@@ -74,6 +76,14 @@ public class MemberService {
 		memberDao.modify(id, loginPw, name, nickname, email, cellphoneNo);
 		
 		return new ResultData("S-1", "회원정보가 수정되었습니다.", "id", id);
+	}
+
+	public ResultData checkValidModifyPrivateAuthCode(int actorId, String passwordAuthCode) {
+		if (attrService.getValue("member__" + actorId + "__extra__modifyPrivateAuthCode").equals(passwordAuthCode)) {
+            return new ResultData("S-1", "유효한 키 입니다.");
+        }
+
+        return new ResultData("F-1", "유효하지 않은 키 입니다.");
 	}
 
 }
