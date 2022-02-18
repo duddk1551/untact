@@ -1,5 +1,7 @@
 package com.cya.untact.service;
 
+import java.util.UUID;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -78,12 +80,23 @@ public class MemberService {
 		return new ResultData("S-1", "회원정보가 수정되었습니다.", "id", id);
 	}
 
-	public ResultData checkValidModifyPrivateAuthCode(int actorId, String passwordAuthCode) {
-		if (attrService.getValue("member__" + actorId + "__extra__modifyPrivateAuthCode").equals(passwordAuthCode)) {
+	public ResultData checkValidPasswordAuthCode(int actorId, String passwordAuthCode) {
+		if (attrService.getValue("member__" + actorId + "__extra__passwordAuthCode").equals(passwordAuthCode)) {
             return new ResultData("S-1", "유효한 키 입니다.");
         }
 
         return new ResultData("F-1", "유효하지 않은 키 입니다.");
+	}
+
+	public String getpasswordAuthCode(int actorId) {
+		
+		String attrName = "member__" +  actorId + "__extra__passwordAuthCode";
+		String authCode = UUID.randomUUID().toString();
+		String expireDate = Util.getDateStrLater(60 * 60); //현재 시간부터 1시간 후
+		
+		attrService.setValue(attrName, authCode, expireDate);
+		
+		return authCode;
 	}
 
 }

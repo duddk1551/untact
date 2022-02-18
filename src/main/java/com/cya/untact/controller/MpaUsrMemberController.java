@@ -38,16 +38,14 @@ public class MpaUsrMemberController {
 	}
 	
 	@RequestMapping("/usr/member/modify")
-	public String showModify(HttpServletRequest req, String modifyPrivateAuthCode) {
+	public String showModify(HttpServletRequest req, String passwordAuthCode) {
 		
 		Member loginedMember = ((Rq)req.getAttribute("rq")).getLoginedMember();
-		ResultData checkValidModifyPrivateAuthCodeRd = memberService.checkValidModifyPrivateAuthCode(loginedMember.getId(), modifyPrivateAuthCode);
+		ResultData checkValidPasswordAuthCodeRd = memberService.checkValidPasswordAuthCode(loginedMember.getId(), passwordAuthCode);
 		
-		if(checkValidModifyPrivateAuthCodeRd.isFail()) {
-			return Util.msgAndBack(req, checkValidModifyPrivateAuthCodeRd.getMsg());
+		if(checkValidPasswordAuthCodeRd.isFail()) {
+			return Util.msgAndBack(req, checkValidPasswordAuthCodeRd.getMsg());
 		}
-		
-		log.debug("checkValidModifyPrivateAuthCodeRd : " + checkValidModifyPrivateAuthCodeRd);
 		
 		return "usr/member/modify";
 	}
@@ -118,7 +116,11 @@ public class MpaUsrMemberController {
 		if(loginedMember.getLoginPw().equals(loginPw) == false) {
 			return Util.msgAndBack(req, "비밀번호가 일치하지 않습니다.");
 		}
-		log.debug("redirectUri : " + redirectUri);
+		
+		String authCode = memberService.getpasswordAuthCode(loginedMember.getId());
+		
+		redirectUri = Util.getNewUri(redirectUri, "passwordAuthCode", authCode);
+		
 		return Util.msgAndReplace(req, "", redirectUri);
 
 	}
@@ -158,7 +160,14 @@ public class MpaUsrMemberController {
 	}
 	
 	@RequestMapping("/usr/member/doModify")
-	public String modifyMember(HttpServletRequest req, String loginPw, String name, String nickname, String email, String cellphoneNo) {
+	public String modifyMember(HttpServletRequest req, String loginPw, String name, String nickname, String email, String cellphoneNo, String passwordAuthCode) {
+		
+		Member loginedMember = ((Rq)req.getAttribute("rq")).getLoginedMember();
+		ResultData checkValidPasswordAuthCodeRd = memberService.checkValidPasswordAuthCode(loginedMember.getId(), passwordAuthCode);
+		
+		if(checkValidPasswordAuthCodeRd.isFail()) {
+			return Util.msgAndBack(req, checkValidPasswordAuthCodeRd.getMsg());
+		}
 		
 		int id = ((Rq)req.getAttribute("rq")).getLoginedMemberId();
 

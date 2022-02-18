@@ -77,6 +77,7 @@ function MemberModify__submitForm(form) {
 <div class="section section-member-modify px-2">
 	<div class="container mx-auto">
 		<form method="POST" action="doModify" onsubmit="MemberModify__submitForm(this); return false;">
+			<input type="hidden" name="passwordAuthCode" value="${param.passwordAuthCode}"/>
 			<input type="hidden" name="loginPw" />
 			<div class="form-control">
 				<label class="label"> 아이디 </label>
