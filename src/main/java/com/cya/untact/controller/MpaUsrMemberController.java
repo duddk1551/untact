@@ -145,8 +145,14 @@ public class MpaUsrMemberController {
 		HttpSession session = req.getSession();
 		session.setAttribute("loginedMemberId", member.getId());
 		
-		
 		String msg = "환영합니다.";
+		
+		boolean IsUsingTempPassword = memberService.IsUsingTempPassword(member.getId());
+		
+		if(IsUsingTempPassword) {
+			msg = "임시 비밀번호를 변경해주세요.";
+			redirectUri = "/usr/member/mypage";
+		}
 		return Util.msgAndReplace(req, msg, redirectUri);
 	}
 	
