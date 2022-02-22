@@ -37,6 +37,8 @@ public class MemberService {
 		
 		int id = memberDao.getLastInsertId();
 		
+		attrService.setValue("member", id , "extra", "needToChangePassword", "0", Util.getDateStrLater(60*60*24*10));
+		
 		return new ResultData("S-1", "회원가입이 완료되었습니다.", "id", id);
 	}
 
@@ -78,6 +80,7 @@ public class MemberService {
 		memberDao.modify(id, loginPw, name, nickname, email, cellphoneNo);
 		
 		if(loginPw != null) {
+			attrService.setValue("member", id , "extra", "needToChangePassword", "0", Util.getDateStrLater(60*60*24*10));
 			attrService.remove("member", id, "extra", "useTempPassword");
 		}
 		
@@ -103,8 +106,12 @@ public class MemberService {
 		return authCode;
 	}
 
-	public boolean IsUsingTempPassword(int actorId) {
+	public boolean usingTempPassword(int actorId) {
 		return attrService.getValue("member", actorId,  "extra", "useTempPassword").equals("1");
+	}
+
+	public boolean needToChangePassword(int actorId) {
+		return attrService.getValue("member", actorId,  "extra", "needToChangePassword").equals("0") == false;
 	}
 
 }
