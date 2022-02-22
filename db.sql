@@ -111,9 +111,9 @@ CREATE TABLE `member`(
     loginId CHAR(20) NOT NULL UNIQUE COMMENT '로그인아이디',
     loginPw VARCHAR(100) NOT NULL COMMENT '로그인비번',
     `name` CHAR(50) NOT NULL COMMENT '이름',
-    nickname CHAR(50) NOT NULL UNIQUE COMMENT '별명',
-    email CHAR(50) NOT NULL UNIQUE COMMENT '이메일',
-    cellphoneNo CHAR(15) NOT NULL UNIQUE COMMENT '휴대폰번호',
+    nickname CHAR(50) NOT NULL COMMENT '별명',
+    email CHAR(50) NOT NULL COMMENT '이메일',
+    cellphoneNo CHAR(15) NOT NULL COMMENT '휴대폰번호',
     delStatus TINYINT(1) UNSIGNED NOT NULL DEFAULT 0 COMMENT '탈퇴여부',
     delDate DATETIME COMMENT '탈퇴날짜'
 )ENGINE=INNODB DEFAULT CHARSET=utf8;

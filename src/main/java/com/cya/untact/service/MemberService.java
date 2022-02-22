@@ -18,6 +18,8 @@ public class MemberService {
     private String siteMainUri;
     @Value("${custom.siteName}")
     private String siteName;
+    @Value("${custom.needToChangePasswordFreeDays}")
+    private int needToChangePasswordFreeDays;
 	
 	@Autowired
 	private MemberDao memberDao;
@@ -29,6 +31,10 @@ public class MemberService {
 	public Member getMemberByLoginId(String loginId) {
 		return memberDao.getMemberByLoginId(loginId);
 	}
+	
+	public int getNeedToChangePasswordFreeDays() {
+		return needToChangePasswordFreeDays;
+	}
 
 	public ResultData join(String loginId, String loginPw, String name, String nickname, String email,
 			String cellphoneNo) {
@@ -37,11 +43,16 @@ public class MemberService {
 		
 		int id = memberDao.getLastInsertId();
 		
-		attrService.setValue("member", id , "extra", "needToChangePassword", "0", Util.getDateStrLater(60*60*24*10));
+		setNeedToChangePasswordLater(id);
 		
 		return new ResultData("S-1", "회원가입이 완료되었습니다.", "id", id);
 	}
 
+
+	private void setNeedToChangePasswordLater(int actorId) {
+		int days = getNeedToChangePasswordFreeDays();
+		attrService.setValue("member", actorId , "extra", "needToChangePassword", "0", Util.getDateStrLater(60*60*24*days));	
+	}
 
 	public Member getMemberById(int id) {
 		return memberDao.getMember(id);
@@ -80,7 +91,7 @@ public class MemberService {
 		memberDao.modify(id, loginPw, name, nickname, email, cellphoneNo);
 		
 		if(loginPw != null) {
-			attrService.setValue("member", id , "extra", "needToChangePassword", "0", Util.getDateStrLater(60*60*24*10));
+			setNeedToChangePasswordLater(id);
 			attrService.remove("member", id, "extra", "useTempPassword");
 		}
 		
