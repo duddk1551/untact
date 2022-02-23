@@ -1,6 +1,5 @@
 package com.cya.untact.util;
 
-import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.net.URLEncoder;
 import java.security.MessageDigest;
@@ -18,7 +17,9 @@ import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.cya.untact.dto.Member;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class Util {
@@ -95,6 +96,17 @@ public class Util {
 
         return sb.toString();
     }
+    
+    public static String toJsonStr(Object obj) {
+		ObjectMapper mapper = new ObjectMapper();
+		try {
+			return mapper.writeValueAsString(obj);
+		} catch (JsonProcessingException e) {
+			e.printStackTrace();
+		}
+
+		return "";
+	}
 
 	public static String toJsonStr(Map<String, Object> param) {
 		ObjectMapper mapper = new ObjectMapper();
@@ -397,4 +409,14 @@ public class Util {
 
         return dateStr;
     }
+
+	public static <T> T fromJsonStr(String jsonStr, Class<T> cls) {
+		ObjectMapper om = new ObjectMapper();
+		try {
+			return (T)om.readValue(jsonStr, cls);
+		} catch (JsonProcessingException e) {
+			e.printStackTrace();
+			return null;
+		} 
+	}
 }

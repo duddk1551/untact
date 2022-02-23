@@ -20,24 +20,30 @@ import lombok.extern.slf4j.Slf4j;
 @Component
 @Slf4j
 public class BeforeActionInterceptor implements HandlerInterceptor {
-	
+
 	@Autowired
-	private MemberService memberService; 
-	
+	private MemberService memberService;
+
 	@Override
 	public boolean preHandle(HttpServletRequest req, HttpServletResponse resp, Object handler) throws Exception {
-		
-		Map<String,String> paramMap = Util.getParamMap(req);
-		
+
+		Map<String, String> paramMap = Util.getParamMap(req);
+
 		HttpSession session = req.getSession();
-		
+
 		Member loginedMember = null;
 		int loginedMemberId = 0;
-		
-		if(session.getAttribute("loginedMemberId") != null) {
-			loginedMemberId = (int)session.getAttribute("loginedMemberId");
+
+		if (session.getAttribute("loginedMemberId") != null) {
+			loginedMemberId = (int) session.getAttribute("loginedMemberId");
 		}
-		if(loginedMemberId != 0) {
+		
+		if (loginedMemberId != 0) {
+			String loginedMemberJsonStr = (String) session.getAttribute("loginedMemberJsonStr");
+			if(loginedMemberJsonStr != null) {
+				log.debug("여기탄다!!!!");
+				loginedMember = Util.fromJsonStr(loginedMemberJsonStr, Member.class);
+			}
 			loginedMember = memberService.getMemberById(loginedMemberId);
 		}
 
@@ -47,13 +53,17 @@ public class BeforeActionInterceptor implements HandlerInterceptor {
 		if (queryString != null && queryString.length() > 0) {
 			currentUri += "?" + queryString;
 		}
-		
+
 		boolean needToChangePassword = false;
-		
-		if(loginedMember != null) {
-			needToChangePassword = memberService.needToChangePassword(loginedMember.getId());
+
+		if (loginedMember != null) {
+			if (session.getAttribute("needToChangePassword") == null) {
+				needToChangePassword = memberService.needToChangePassword(loginedMember.getId());
+				session.setAttribute("needToChangePassword", needToChangePassword);
+			}
+			needToChangePassword = (boolean)session.getAttribute("needToChangePassword");
 		}
-		
+
 		req.setAttribute("rq", new Rq(loginedMember, currentUri, paramMap, needToChangePassword));
 
 		return HandlerInterceptor.super.preHandle(req, resp, handler);
