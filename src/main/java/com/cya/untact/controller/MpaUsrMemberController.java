@@ -126,7 +126,7 @@ public class MpaUsrMemberController {
 	}
 	
 	@RequestMapping("/usr/member/doLogin")
-	public String login(HttpServletRequest req, String loginId, String loginPw, String redirectUri) {
+	public String login(HttpServletRequest req, HttpSession session, String loginId, String loginPw, String redirectUri) {
 		
 		if(Util.isEmpty(redirectUri)) {
 			redirectUri = "/";
@@ -142,7 +142,6 @@ public class MpaUsrMemberController {
 			return Util.msgAndBack(req, "비밀번호가 일치하지 않습니다.");
 		}
 		
-		HttpSession session = req.getSession();
 		session.setAttribute("loginedMemberId", member.getId());
 		
 		String msg = "환영합니다.";

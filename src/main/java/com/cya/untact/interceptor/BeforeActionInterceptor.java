@@ -48,7 +48,13 @@ public class BeforeActionInterceptor implements HandlerInterceptor {
 			currentUri += "?" + queryString;
 		}
 		
-		req.setAttribute("rq", new Rq(loginedMember, currentUri, paramMap));
+		boolean needToChangePassword = false;
+		
+		if(loginedMember != null) {
+			needToChangePassword = memberService.needToChangePassword(loginedMember.getId());
+		}
+		
+		req.setAttribute("rq", new Rq(loginedMember, currentUri, paramMap, needToChangePassword));
 
 		return HandlerInterceptor.super.preHandle(req, resp, handler);
 	}

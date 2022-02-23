@@ -43,6 +43,17 @@
 
 				<nav class="menu-box-1">
 					<ul class="flex h-full">
+						<c:if test="${rq.isLogined() && rq.needToChangePassword}">
+							<li>
+								<a href="../member/checkPassword?afterUri=..%2Fmember%2Fmodify" class="h-full flex items-center px-5">
+									<span>
+										<i class="fas fa-house-user"></i>
+									</span>
+									<span class="hidden sm:block text-red-400">&nbsp;CHANGE PASSWORD</span>
+								</a>
+								<div></div>
+							</li>
+						</c:if>
 						<li>
 							<a href="/" class="h-full flex items-center px-5">
 								<span>
@@ -89,40 +100,43 @@
 							</div>
 						</li>
 						<c:if test="${rq.isLogined()}">
-						<li>
-							<a href="../member/doLogout" class="h-full flex items-center px-5">
-								<span>
-									<i class="fas fa-sign-out-alt"></i>
-								</span>
-								<span class="hidden md:block">&nbsp;LOGOUT</span>
-							</a>
-						</li>
-						<li>
-							<a href="../member/mypage" class="h-full flex items-center px-5">
-								<span>
-									<i class="fas fa-sign-in-alt"></i>
-								</span>
-								<span class="hidden md:block">&nbsp;${rq.loginedMember.nickname}＇s MY PAGE</span>
-							</a>
-						</li>
+							<li>
+								<a href="../member/doLogout"
+									class="h-full flex items-center px-5">
+									<span>
+										<i class="fas fa-sign-out-alt"></i>
+									</span>
+									<span class="hidden md:block">&nbsp;LOGOUT</span>
+								</a>
+							</li>
+							<li>
+								<a href="../member/mypage" class="h-full flex items-center px-5">
+									<span>
+										<i class="fas fa-sign-in-alt"></i>
+									</span>
+									<span class="hidden md:block">&nbsp;${rq.loginedMember.nickname}＇s
+										MY PAGE</span>
+								</a>
+							</li>
 						</c:if>
 						<c:if test="${rq.notLogined}">
-						<li>
-							<a href="${rq.loginPageUri}" class="h-full flex items-center px-5">
-								<span>
-									<i class="fas fa-sign-in-alt"></i>
-								</span>
-								<span class="hidden md:block">&nbsp;LOGIN</span>
-							</a>
-						</li>
-						<li>
-							<a href="../member/join" class="h-full flex items-center px-5">
-								<span>
-									<i class="fas fa-sign-in-alt"></i>
-								</span>
-								<span class="hidden md:block">&nbsp;JOIN</span>
-							</a>
-						</li>
+							<li>
+								<a href="${rq.loginPageUri}"
+									class="h-full flex items-center px-5">
+									<span>
+										<i class="fas fa-sign-in-alt"></i>
+									</span>
+									<span class="hidden md:block">&nbsp;LOGIN</span>
+								</a>
+							</li>
+							<li>
+								<a href="../member/join" class="h-full flex items-center px-5">
+									<span>
+										<i class="fas fa-sign-in-alt"></i>
+									</span>
+									<span class="hidden md:block">&nbsp;JOIN</span>
+								</a>
+							</li>
 						</c:if>
 					</ul>
 				</nav>
@@ -130,7 +144,5 @@
 
 		</header>
 		<div class="title-bar px-3">
-			<div class="container mx-auto">
-				${pageTitle}
-			</div>
+			<div class="container mx-auto">${pageTitle}</div>
 		</div>
