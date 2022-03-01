@@ -6,7 +6,6 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -14,6 +13,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.cya.untact.dto.Article;
 import com.cya.untact.dto.Board;
 import com.cya.untact.dto.ResultData;
+import com.cya.untact.dto.Rq;
 import com.cya.untact.service.ArticleService;
 import com.cya.untact.util.Util;
 
@@ -101,7 +101,10 @@ public class MpaUsrArticleController {
 		if(Util.isEmpty(content)) {
 			return Util.msgAndBack(req, "내용을 입력해주세요");
 		}
-		int memberId = 3;//임시
+		
+		Rq rq = (Rq)req.getAttribute("rq");
+		
+		int memberId = rq.getLoginedMemberId();
 		ResultData writeArticleRd = articleService.addArticle(boardId, memberId, title, content);
 		
 		if(writeArticleRd.isFail()) {
